@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'graphene_django',
+    'consumer_app',
+    'report_app',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +81,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+# Set the GraphQL schema
+GRAPHENE = {
+    'SCHEMA': 'report.schema.schema',
 }
 
 

@@ -3,7 +3,9 @@ Backend Service that consumes temperature feed and implements a GraphQL API to c
 
 ```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right!``
 
-This service deploys to a Docker Container running TPS Django Project with the TPS App.
+This service deploys to a Docker Container running TPS Django Project with the following Apps
+ - report  - GraphQL API to accessing temperature data.  (Has People Skills)
+ - consumer - Ingests data stream and stores in database
 
 
 ## Setup
@@ -26,6 +28,9 @@ Build and launch service within Docker
 # Django Setup
 
 ## django-admin startproject
+
+```django-admin startproject tps .```
+
 Used to create the temp_processor_project.
 - manage.py - CLI Tool for managing Django
 - settings.py - Setting for Django

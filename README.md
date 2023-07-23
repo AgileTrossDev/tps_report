@@ -1,5 +1,5 @@
-# Temperature Processor Service (TPS)
-Backend Service that consumes temperature feed and implements a GraphQL API to create Temperature Processor Service Report, or TPS Report for short.
+# Temperature Processor Service (TPS) Report Service
+Service that consumes a temperature feed and implements a GraphQL API to create Temperature Processor Service Report, or TPS Report for short.
 
 ```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right!``
 
@@ -14,12 +14,42 @@ This service deploys to a Docker Container running TPS Django Project with the f
  This app will handle the backend part of your application that consumes the data stream. Depending on your requirements, this app might include background tasks, data processing, and interacting with the data stream source. You can use Django Channels or any other library that supports asynchronous processing for consuming the data stream.
  
 
+# Assignment
+## Must Haves
+- Let's get fancy, and use modern Python (>= 3.7).
+- A Dockerfile and/or docker-compose.yml file should be provided, to make the whole setup portable and easy-
+to-use.
+- The service should be built using Django. Additional libraries and database solution can be selected at will.
+- A README.md file is expected, to detail the chosen solution, and how to run it.
+- Relevant unit tests should be provided (using pytest).
+- Use Python type annotations.
+
+## Tasks:
+- Build a Django app which can store temperature readings (a timestamp and a value) in the database.
+- Subscribe to the temperature feed to continuously populate the
+database.
+- Build a GraphQL API exposing the following operations:
+  - a query that returns the current temperature (last emitted temperature)
+  - a query that returns the minimum and
+
+
+
+
 
 ## Setup
+### Dependencies
+- Docker
+- Docker-compose
+- Python 3.9
+- pip
+
+### Pip Install
 Use pip to install requirements:
 `pip install -r requirements.txt`
 
 ***NOTE** Requirement versions are not constrained at the moment.
+
+
 
 ## Launching the Service
 Build and launch service within Docker

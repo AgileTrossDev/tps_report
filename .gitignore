@@ -27,3 +27,4 @@ build/
 /static/
 *.db
 *.sqlite3
+a.txt

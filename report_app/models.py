@@ -4,6 +4,7 @@ from django.db import models
 from django.db import models
 from timezone_field import TimeZoneField
 
+
 class TimeSeries(models.Model):
     timestamp = models.DateTimeField(unique=True)
     value = models.FloatField()

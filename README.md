@@ -4,8 +4,15 @@ Backend Service that consumes temperature feed and implements a GraphQL API to c
 ```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right!``
 
 This service deploys to a Docker Container running TPS Django Project with the following Apps
- - report  - GraphQL API to accessing temperature data.  (Has People Skills)
+ 
+ - report  - GraphQL API to accessing temperature data.  (Has People Skills. Talks to the customer, so the software engineers don't have to)
+
+ This app will handle the frontend part of your application, including the GraphQL API, views, templates, and any client-side logic or JavaScript code. You can use Graphene or any other library to implement the GraphQL API in this app.
+
  - consumer - Ingests data stream and stores in database
+ 
+ This app will handle the backend part of your application that consumes the data stream. Depending on your requirements, this app might include background tasks, data processing, and interacting with the data stream source. You can use Django Channels or any other library that supports asynchronous processing for consuming the data stream.
+ 
 
 
 ## Setup
@@ -16,7 +23,7 @@ Use pip to install requirements:
 
 ## Launching the Service
 Build and launch service within Docker
-`docker-compose up``
+```docker-compose up --build```
 
 ## Accessing
 
@@ -39,6 +46,10 @@ Used to create the temp_processor_project.
 - asgi.py - Entry Point for ASGI-based deployement (Daphne/WebSocket)
 
 ## python manage.py startap
+
+```python manage.py startap report .```
+```python manage.py startap consumer .```
+
 USed to setup the Application Module for the Django App.  In this Project, we are building the Temp Processor Application.  Django Projects may have several different Apps.  Using this utility a directory is created for the App containing the following files:
 
 - __init__.py: An empty file that marks the directory as a Python package.

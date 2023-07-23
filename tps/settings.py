@@ -85,7 +85,7 @@ DATABASES = {
 
 # Set the GraphQL schema
 GRAPHENE = {
-    'SCHEMA': 'report.schema.schema',
+    'SCHEMA': 'report_app.schema.schema',
 }
 
 

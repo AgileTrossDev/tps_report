@@ -1,6 +1,10 @@
-mypy>=0.910
+
 Django>=3.2.5
-flake8>=4.0.1
+
 graphene-django>=3.0.0
 django-timezone-field>=4.1.1
 django-filter>=2.5.0
+websockets>=10.0
+influxdb-client>=1.36.1
+
+

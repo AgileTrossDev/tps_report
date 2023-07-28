@@ -1,10 +1,35 @@
-# Temperature Processor Service (TPS) Report Service
-Service that consumes a temperature feed and implements a GraphQL API to create Temperature Processor Service Report, or TPS Report for short.
+# Temperature Processor Service (TPS) Report 
+Temperature Processor Service Report, or TPS Report for short, is a system of microservices running in Docker.  It consists of a headless consumer service that subscribes to a websocket streaming temperature telemetry is responsible for populating an external InfluxDB with the time-series data representing the Temperature measurements. The InfluxDB runs in the timeseries_temperature_db Docker and serves as the backing-store for the system. A Django Project called TPS hosts the Temperature API Application that implements a GraphQL API using Graphene to allow users the ability to query the Temperature measurements streamed in the InfluxDB. 
 
-```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right!``
+```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right?```
 
-This service deploys to a Docker Container running TPS Django Project with the following Apps
- 
+# TODO
+- Deploy TPS Project to Docker
+- Deploy temperature_reader to Docker
+- Change the default settings of the influxdb
+
+
+
+# Services
+TPS is easily lanuched and managed by the docker-compose.yml file.
+
+Build and launch service within Docker
+```docker-compose up --build```
+
+
+## satellite-temperature
+
+## Consumder
+Connects
+
+
+
+
+## Temperature Reader
+Simple script meant as a development tool.  It will execute a loop with a 2 second sleep in between queries to the Timeseries Temperature DB.  The results of the query we will printed to stdout.
+
+
+
  - report  - GraphQL API to accessing temperature data.  (Has People Skills. Talks to the customer, so the software engineers don't have to)
 
  This app will handle the frontend part of your application, including the GraphQL API, views, templates, and any client-side logic or JavaScript code. You can use Graphene or any other library to implement the GraphQL API in this app.
@@ -30,11 +55,8 @@ to-use.
 database.
 - Build a GraphQL API exposing the following operations:
   - a query that returns the current temperature (last emitted temperature)
-  - a query that returns the minimum and
-
-
-
-
+  - a query that returns the minimum and maximum temperature within a time window provided via a before
+and/or after timestamp as argument
 
 ## Setup
 ### Dependencies
@@ -49,18 +71,12 @@ Use pip to install requirements:
 
 ***NOTE** Requirement versions are not constrained at the moment.
 
-
-
 ## Launching the Service
-Build and launch service within Docker
-```docker-compose up --build```
+
 
 ## Accessing
 
 ``http://localhost:8000/```
-
-
-
 
 # Django Setup
 

@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+
+
 import time
 from influxdb_client import InfluxDBClient
 
 class TemperatureInfluxDbReader:
     
   def __init__(self) -> None:
-      
+    print ("TemperatureInfluxDbReader instance is using hard coded DB connection configuration")
+
     # Set your InfluxDB credentials and connection details
+    # TODO: Read from environment
     influxdb_url = "http://localhost:8086"  # Replace with your InfluxDB URL
     influxdb_token = "my-admin-token"  # Replace with your InfluxDB token
     self.influxdb_org = "my-org"  # Replace with your organization

@@ -117,35 +117,35 @@ Use pip to install requirements:
 
 
 ## Current Temperature
-```
+`
 query {
   currentTemperature {
     time
     value
    }
 }
-```
+`
 
 
 ## Min and ax OVer Time Range
 
-```
+`
 query {
 temperatureStatistics(after: "2023-07-28T13:00:00+00:00", before: "2023-07-28T14:00:00+00:00") {
 min
 max
 }
 }
-```
+`
 
 ## Last Two Seconds
-```
+`
 query MyQuery {
   temperatureMeasurements {  
     time
     value
   }
 }
-```
+`
 
 

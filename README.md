@@ -111,7 +111,7 @@ query {
 `
 
 
-## Min and ax OVer Time Range
+## Min and Max over a Time Range
 
 ```
 query {

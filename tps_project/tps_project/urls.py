@@ -16,14 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
 from graphene_django.views import GraphQLView
 from temperature_api.views import CustomGraphQLView
+from temperature_api.views import TemperatureView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r"graphql", GraphQLView.as_view(graphiql=True)),
-    path('temperature/', CustomGraphQLView.as_view(graphiql=True), name='temperature'),
+    path("graphql", GraphQLView.as_view(graphiql=True)),
+    path(
+        'temperature/',
+        CustomGraphQLView.as_view(
+            graphiql=True),
+        name='temperature'),  
+   # path('current_temperature/', TemperatureView.as_view(), name='temperature_view'), # TODO: Not Functional Yet
 ]
-
-

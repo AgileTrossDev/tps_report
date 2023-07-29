@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-po0syh@thndqx3s3m_s4kgyt@y9olh6i0_lqg123vb8^e5f36#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# TODO: For Development, update for environments
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'temperature_api',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +76,6 @@ WSGI_APPLICATION = 'tps_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
 
 
 # Password validation
@@ -120,3 +120,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GRAPHENE = {
     'SCHEMA': 'temperature_api.schema.schema'
 }
+
+INFLUXDB_URL = os.environ.get('INFLUXDB_URL', 'http://localhost:8086')
+INFLUXDB_ORG = os.environ.get('DOCKER_INFLUXDB_INIT_ORG', 'my-org')
+INFLUXDB_TOKEN = os.environ.get(
+    'DOCKER_INFLUXDB_INIT_ADMIN_TOKEN',
+    'my-admin-token')
+INFLUXDB_BUCKET = os.environ.get('DOCKER_INFLUXDB_INIT_BUCKET', 'my-bucket')
+
+ASGI_APPLICATION = 'temperature_api.routing.application'

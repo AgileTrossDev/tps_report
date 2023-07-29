@@ -1,50 +1,69 @@
 #!/usr/bin/env python3
 
-
+import os
 import time
 from influxdb_client import InfluxDBClient
 
+
 class TemperatureInfluxDbReader:
-    
-  def __init__(self) -> None:
-    print ("TemperatureInfluxDbReader instance is using hard coded DB connection configuration")
 
-    # Set your InfluxDB credentials and connection details
-    # TODO: Read from environment
-    influxdb_url = "http://localhost:8086"  # Replace with your InfluxDB URL
-    influxdb_token = "my-admin-token"  # Replace with your InfluxDB token
-    self.influxdb_org = "my-org"  # Replace with your organization
-    self.influxdb_bucket = "my-bucket"  # Replace with your bucket name
+    def __init__(self) -> None:
+        """
+        Set your InfluxDB credentials and connection details
+        """
 
-    # Create the InfluxDB client
-    self.client = InfluxDBClient(url=influxdb_url, token=influxdb_token)
-    self.active = True
+        influxdb_url = os.environ.get(
+            'INFLUXDB_DB_URL', 'http://localhost:8086')
+        influxdb_token = os.environ.get(
+            'DOCKER_INFLUXDB_INIT_ADMIN_TOKEN', 'my-admin-token')
+        self.influxdb_org = os.environ.get(
+            'DOCKER_INFLUXDB_INIT_ORG', 'my-org')
+        self.influxdb_bucket = os.environ.get(
+            'DOCKER_INFLUXDB_INIT_BUCKET', 'my-bucket')
 
-  # Close the client
-  def disconnect(self):    
-    self.client.close()
-    print ("Disconnected from Influx")
-    self.active = False
+        # Create the InfluxDB client
+        print(
+            f"TemperatureInfluxDbReader connect to InfluxDB URL: {influxdb_url}")
+        self.client = InfluxDBClient(url=influxdb_url, token=influxdb_token)
+        self.active = True
 
-  # Query the "temperature" measurement
-  def read_temperature_measurement(self):
-    
-    query = f'from(bucket: "{self.influxdb_bucket}") |> range(start: -2s) |> filter(fn: (r) => r._measurement == "temperature")'
-    result = self.client.query_api().query(query, org=self.influxdb_org)
+    def disconnect(self):
+        """
+        Closes connection and goes inactive
+        """
+        self.client.close()
+        print("Disconnected from Influx")
+        self.active = False
 
-    # Print the temperature values
-    for table in result:
-        for record in table.records:
-            print(f"Temperature: {record['_time']} - Value: {record['_value']}")
+    def read_temperature_measurement(self):
+        """
+        Query the "temperature" measurement
+        """
+
+        query = f'''
+          from(bucket: "{self.influxdb_bucket}")
+          |> range(start: -2s)
+          |> filter(fn: (r) => r._measurement == "temperature")
+        '''
+        result = self.client.query_api().query(query, org=self.influxdb_org)
+
+        # Print the temperature values
+        for table in result:
+            for record in table.records:
+                print(
+                    f"Temperature: {record['_time']} - Value: {record['_value']}")
+
+    def execution_loop(self):
+        """
+        Query the "temperature" measurement every 2 seconds while active
+        """
+        while self.active:
+            self.read_temperature_measurement()
+            print("Waiting for 2 seconds...")
+            time.sleep(2)
 
 
-  # Query the "temperature" measurement every 2 seconds while active
-  def execution_loop(self):
-      while self.active:
-        self.read_temperature_measurement()
-        print("Waiting for 2 seconds...")
-        time.sleep(2)
-
+# Main Execution
 if __name__ == "__main__":
     client = TemperatureInfluxDbReader()
     try:

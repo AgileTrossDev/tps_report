@@ -1,53 +1,86 @@
 # Temperature Processor Service (TPS) Report 
-Temperature Processor Service Report, or TPS Report for short, is a system of microservices running in Docker.  It consists of a headless consumer service that subscribes to a websocket streaming temperature telemetry is responsible for populating an external InfluxDB with the time-series data representing the Temperature measurements. The InfluxDB runs in the timeseries_temperature_db Docker and serves as the backing-store for the system. A Django Project called TPS hosts the Temperature API Application that implements a GraphQL API using Graphene to allow users the ability to query the Temperature measurements streamed in the InfluxDB. 
+Temperature Processor Service Report, or TPS Report for short, is a system of microservices running in Docker.  It consists of a headless Consumer service that subscribes to a websocket streaming temperature telemetry and is responsible for populating an external Influx Database with the time-series data representing the Temperature measurements. The InfluxDB runs in the timeseries_temperature_db Docker and serves as the backing-store for the system. A Django Project called TPS hosts the Temperature API Application that implements a GraphQL API using Graphene to allow users the ability to query the Temperature measurements streamed in the InfluxDB. 
 
 ```Yeah. It's just we're putting new coversheets on all the TPS reports before they go out now. So if you could go ahead and try to remember to do that from now on, that'd be great. All right?```
 
 # TODO
-- Deploy TPS Project to Docker
-- Deploy temperature_reader to Docker
-- Change the default settings of the influxdb
-
+- More Unit Tests
+- Implement Functional Tests with Mocks
+- Implement repeatable Integration Test
 
 
 # Services
 TPS is easily lanuched and managed by the docker-compose.yml file.
 
+Test
+```pytest```
+
 Build and launch service within Docker
 ```docker-compose up --build```
 
+Access the GraphQL API here
+```http://localhost:8000/graphql```
+
+Following along at home
+```docker-compose logs -f```
+
+Shut it down
+```docker-compose down```
 
 ## satellite-temperature
+Provied Docker that features a websocket streaming Temperature TLM.
 
-## Consumder
-Connects
+## Consumer
+Connects and subscribes via a websocket to the temperature telemetry feed provided by the satellite-temperature serivce.  The incoming data is written in real-time to the InfluxDb hosted in the timeseries_temperature_db Docker service.
+
+### Design Decisions
+This service was intentionally separated from the Django application hosting the query API.  This follows micro-service design best practices for modularity and allows for a more resillent system with fault isolation.  This allows for easier scalability and easier deployment in the future.
+
+### TODO:
+- Provide Restful API to check health of consumer and manage it configuration and to activate and connect to other streams
+
+## TPS Project
+Django Application implementing the GraphQL API for query Temperature Measurements stored in the InfluxDB hosted in the timeseries_temperature_db container.
+
+### TODO:
+- Connection Pool of InfluxDB Clients to improve performance and reduce overhead. (Not an issue yet)
 
 
+## timeseries_temperature_db
+Container hosting the InfluxDB serving as the backing-store for the system.  Currently only the Temperature ,measuremeant is stored.  
 
+### Desgin Decision
+The data being processed in this system, time stamped temperature readings, is ideal for a time-series database.   Although Django does not support Influx natively, it was trivial to connect these two services.
+
+### Debugging
+Connect to Influx DB CLI. (Use the actual container ID.)
+```
+docker exec -it 53e47cc932c2 influx v1 shell
+show databases
+use my-bucket
+show MEASUREMENTS
+SELECT COUNT(*) temperature
+SELECT * FROM temperature 
+SELECT MIN(value) AS min_temp, MAX(value) AS max_temp FROM temperature WHERE time >= 1690556824942632960.0000000000 AND time <= 1690556825942632960.0000000000
+
+```
 
 ## Temperature Reader
-Simple script meant as a development tool.  It will execute a loop with a 2 second sleep in between queries to the Timeseries Temperature DB.  The results of the query we will printed to stdout.
+Simple script meant as a development tool.  It will execute a loop with a 2 second sleep in between queries to the Timeseries Temperature DB.  The results of the query we will printed to stdout.  This allows me to verify the flow of TLM from the Consumer to the Database.
 
+***Not Deployed***
 
+## Dev Tools
+Tools to help with debug and manual testing
+- iso8601_to_timestamp  
 
- - report  - GraphQL API to accessing temperature data.  (Has People Skills. Talks to the customer, so the software engineers don't have to)
-
- This app will handle the frontend part of your application, including the GraphQL API, views, templates, and any client-side logic or JavaScript code. You can use Graphene or any other library to implement the GraphQL API in this app.
-
- - consumer - Ingests data stream and stores in database
- 
- This app will handle the backend part of your application that consumes the data stream. Depending on your requirements, this app might include background tasks, data processing, and interacting with the data stream source. You can use Django Channels or any other library that supports asynchronous processing for consuming the data stream.
- 
+***Not Deployed***
 
 # Assignment
 ## Must Haves
-- Let's get fancy, and use modern Python (>= 3.7).
-- A Dockerfile and/or docker-compose.yml file should be provided, to make the whole setup portable and easy-
-to-use.
-- The service should be built using Django. Additional libraries and database solution can be selected at will.
-- A README.md file is expected, to detail the chosen solution, and how to run it.
+
 - Relevant unit tests should be provided (using pytest).
-- Use Python type annotations.
+
 
 ## Tasks:
 - Build a Django app which can store temperature readings (a timestamp and a value) in the database.
@@ -78,25 +111,36 @@ Use pip to install requirements:
 
 ``http://localhost:8000/```
 
-# Django Setup
 
-## django-admin startproject
 
-```django-admin startproject tps .```
+# Smoke Test
+```query MyQuery {
+  temperatureMeasurements {  
+    time
+    value
+  }
+}```
 
-Used to create the temp_processor_project.
-- manage.py - CLI Tool for managing Django
-- settings.py - Setting for Django
-- urls.py - URL Configuration of the project
-- wsgi.py - Entry point for WSGI Servers (Gunicorn)
-- asgi.py - Entry Point for ASGI-based deployement (Daphne/WebSocket)
 
-## python manage.py startap
+```query {
+  currentTemperature {
+    time
+    value
+   }
+}```
 
-```python manage.py startap report .```
-```python manage.py startap consumer .```
 
-USed to setup the Application Module for the Django App.  In this Project, we are building the Temp Processor Application.  Django Projects may have several different Apps.  Using this utility a directory is created for the App containing the following files:
+```query {
+temperatureStatistics(after: "2023-07-28T13:00:00+00:00", before: "2023-07-28T14:00:00+00:00") {
+min
+max
+}
+}'''
+
+
+# References
+### Django Setup
+
 
 - __init__.py: An empty file that marks the directory as a Python package.
 - admin.py: This file is used to register models with the Django admin interface, allowing you to manage app-specific data via the admin panel.
@@ -108,15 +152,12 @@ USed to setup the Application Module for the Django App.  In this Project, we ar
 - migrations/: This directory stores database migration files generated by Django when you create or modify models.
 
 
-***Registering the App:*** Once the app is created, you need to register it in the project's settings to ensure Django recognizes and includes it. To do this, open the project's settings.py file and add the app name to the INSTALLED_APPS list.
 
 
-# Docker
 
 
-***Dockerfile*** -  Uses latest Ubuntu image and Python 3 environment for the service.
 
-***docker-compose*** - Runtime information for the temperature_feed service, mapping Port 8000 to the Django Service in the container.
+
 
 
 

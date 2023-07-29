@@ -38,6 +38,7 @@ class TemperatureStatistics(graphene.ObjectType):
     max = graphene.Float()      # Max Temp for a Time Range of the Statistics
     valid = graphene.Boolean()  # Flag if Data is Valid
 
+
 class Query(graphene.ObjectType):
     temperature_measurements = graphene.List(
         TemperatureMeasurementType,
@@ -48,7 +49,7 @@ class Query(graphene.ObjectType):
     temperatureStatistics = graphene.Field(
         TemperatureStatistics,
         after=graphene.DateTime(),
-        before=graphene.DateTime()        
+        before=graphene.DateTime()
     )
 
     def resolve_temperature_measurements(self, info):
@@ -141,17 +142,16 @@ class Query(graphene.ObjectType):
             org=settings.INFLUXDB_ORG, query=q_min)
         max_result = influx_client.query_api().query(
             org=settings.INFLUXDB_ORG, query=q_max)
-        
+
         print(min_result)
         print(max_result)
         print(f"\n\nMIN_Q: {q_min}")
         print(f"\n\nMAX_Q: {q_max}")
 
-        if (min_result == [] or min_result == [] ):
+        if (min_result == [] or min_result == []):
             return TemperatureStatistics(
-            min=0, max=0, valid=False)
+                min=0, max=0, valid=False)
 
-     
         print(f"\n\n{min_result[0]}\n\n")
         print(f"\n\n{max_result[0]}\n\n")
         return TemperatureStatistics(

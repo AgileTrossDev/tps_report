@@ -10,21 +10,21 @@ Temperature Processor Service Report, or TPS Report for short, is a system of mi
 
 
 # Services
-TPS is easily lanuched and managed by the docker-compose.yml file.
+TPS is easily launched and managed by the docker-compose.yml file.
 
-Test
+##Test
 ```pytest```
 
-Build and launch service within Docker
+##Build and launch service within Docker
 ```docker-compose up --build```
 
-Access the GraphQL API here
+##Access the GraphQL API here
 ```http://localhost:8000/graphql```
 
-Following along at home
+##Following along at home
 ```docker-compose logs -f```
 
-Shut it down
+##Shut it down
 ```docker-compose down```
 
 ## satellite-temperature
@@ -37,17 +37,18 @@ Connects and subscribes via a websocket to the temperature telemetry feed provid
 This service was intentionally separated from the Django application hosting the query API.  This follows micro-service design best practices for modularity and allows for a more resillent system with fault isolation.  This allows for easier scalability and easier deployment in the future.
 
 ### TODO:
-- Provide Restful API to check health of consumer and manage it configuration and to activate and connect to other streams
+- Provide RESTful API to check health of consumer and manage the configuration to activate and connect to other streams
 
 ## TPS Project
 Django Application implementing the GraphQL API for query Temperature Measurements stored in the InfluxDB hosted in the timeseries_temperature_db container.
 
 ### TODO:
 - Connection Pool of InfluxDB Clients to improve performance and reduce overhead. (Not an issue yet)
+- Current Temperature and Rolling Average
 
 
 ## timeseries_temperature_db
-Container hosting the InfluxDB serving as the backing-store for the system.  Currently only the Temperature ,measuremeant is stored.  
+Container hosting the InfluxDB serving as the backing-store for the system.  Currently only the Temperature measuremeant is stored.  
 
 ### Desgin Decision
 The data being processed in this system, time stamped temperature readings, is ideal for a time-series database.   Although Django does not support Influx natively, it was trivial to connect these two services.
@@ -77,7 +78,7 @@ Tools to help with debug and manual testing
 ## Setup
 
 ### Dependencies
-Each Service within this System has it's own requirements.txt that should be pip installed.  This is performed automatically during the Docker Deploy.  A Development requirements-dev.txt is found at the root of the repository and contains dependencies to help with testing and linting.0
+Each Service within this System has it's own requirements.txt that should be pip installed.  This is performed automatically during the Docker Deploy.  A Development requirements-dev.txt is found at the root of the repository and contains dependencies to help with testing and linting.
 
 ### Pip Install
 
@@ -92,7 +93,7 @@ Use pip to install the development requirements:
 
 ## Accessing
 
-```http://localhost:8000/```
+```http://localhost:8000/graphql```
 
 
 ***

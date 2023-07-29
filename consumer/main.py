@@ -23,10 +23,10 @@ class ConsumerDbClient:
         token = os.environ.get(
             'DOCKER_INFLUXDB_INIT_ADMIN_TOKEN',
             'my-admin-token')
-        
+
         self.bucket = os.environ.get(
             'DOCKER_INFLUXDB_INIT_BUCKET', 'my-bucket')
-        
+
         self.print_temps = os.environ.get(
             'RUNTIME_ENVIRONMENT', 'local') != "DOCKER"
 
@@ -66,7 +66,7 @@ class ConsumerDbClient:
         self.client.close()
         print("Influx Client disconnected")
 
-    def process_msg(self, data: dict):        
+    def process_msg(self, data: dict):
         if self.print_temps:
             # Log Incoming Temp
             print(data["payload"]["data"]["temperature"])
@@ -86,14 +86,13 @@ class ConsumerDbClient:
             org=self.org,
             record=data_points)
 
-
     async def shutdown(self):
         self.active = False
 
     # Execution pool that opens async websocket connection to a server stream Temperature Data
     # As each data record is received, the message is processed
     async def capture_data(self):
-        
+
         self.active = True
 
         # Subscription Request
@@ -110,10 +109,10 @@ class ConsumerDbClient:
                     await websocket.send(json.dumps(start))
                     print(
                         f"Websocket connection and subscription was succesful to URI: {self.source_uri}")
-                    while self.active:                        
+                    while self.active:
                         await asyncio.sleep(0)
                         try:
-                            data = await websocket.recv()                             
+                            data = await websocket.recv()
                             self.process_msg(json.loads(data))
                         except websockets.ConnectionClosedOK:
                             print("WebSocket connection closed gracefully.")
@@ -130,7 +129,7 @@ class ConsumerDbClient:
             except Exception as e:
                 print(
                     f"Unexpected error occurred outside the WebSocket loop: {e}")
-                break            
+                break
             await asyncio.sleep(0)
 
         print("Gracefully exited capture_data execution loop...")

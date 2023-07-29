@@ -27,6 +27,7 @@ urlpatterns = [
         'temperature/',
         CustomGraphQLView.as_view(
             graphiql=True),
-        name='temperature'),  
-   # path('current_temperature/', TemperatureView.as_view(), name='temperature_view'), # TODO: Not Functional Yet
+        name='temperature'),
+    # path('current_temperature/', TemperatureView.as_view(),
+    # name='temperature_view'), # TODO: Not Functional Yet
 ]

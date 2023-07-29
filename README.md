@@ -128,7 +128,7 @@ query {
     value
    }
 }
-```
+
 
 
 ## Min and ax OVer Time Range
@@ -139,7 +139,7 @@ min
 max
 }
 }
-'''
+
 
 ## Last Two Seconds
 ```
@@ -149,6 +149,6 @@ query MyQuery {
     value
   }
 }
-```
+
 
 

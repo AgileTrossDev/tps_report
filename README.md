@@ -72,44 +72,27 @@ Simple script meant as a development tool.  It will execute a loop with a 2 seco
 
 ## Dev Tools
 Tools to help with debug and manual testing
-- iso8601_to_timestamp  
-
-***Not Deployed***
-
-# Assignment
-## Must Haves
-
-- Relevant unit tests should be provided (using pytest).
-
-
-## Tasks:
-- Build a Django app which can store temperature readings (a timestamp and a value) in the database.
-- Subscribe to the temperature feed to continuously populate the
-database.
-- Build a GraphQL API exposing the following operations:
-  - a query that returns the current temperature (last emitted temperature)
-  - a query that returns the minimum and maximum temperature within a time window provided via a before
-and/or after timestamp as argument
+- iso8601_to_timestamp  ***Not Deployed***
 
 ## Setup
+
 ### Dependencies
-- Docker
-- Docker-compose
-- Python 3.9
-- pip
+Each Service within this System has it's own requirements.txt that should be pip installed.  This is performed automatically during the Docker Deploy.  A Development requirements-dev.txt is found at the root of the repository and contains dependencies to help with testing and linting.0
 
 ### Pip Install
-Use pip to install requirements:
-`pip install -r requirements.txt`
 
-***NOTE** Requirement versions are not constrained at the moment.
+Use pip to install the development requirements:
+`pip install -r requirements-dev.txt`
+
+
+
 
 ## Launching the Service
 
 
 ## Accessing
 
-``http://localhost:8000/```
+```http://localhost:8000/```
 
 
 ***

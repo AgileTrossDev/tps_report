@@ -14,19 +14,19 @@ TPS is easily launched and managed by the docker-compose.yml file.
 
 ### How To
 
-## Test
+#### Test
 ```pytest```
 
-## Build and launch service within Docker
+#### Build and launch service within Docker
 ```docker-compose up --build```
 
-## Access the GraphQL API here
+#### Access the GraphQL API here
 ```http://localhost:8000/graphql```
 
-## Following along at home
+#### Following along at home
 ```docker-compose logs -f```
 
-## Shut it down
+#### Shut it down
 ```docker-compose down```
 
 ## satellite-temperature
